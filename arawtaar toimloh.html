@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3-р анги - Натурал тоог аравтаар тоймлох</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@600;700&family=Nunito:wght@600;800;900&display=swap');
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f1f5f9;
+        }
+        
+        .heading-font {
+            font-family: 'Comfortaa', cursive;
+        }
+
+        .btn-interactive {
+            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .btn-interactive:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+        }
+
+        .btn-interactive:active {
+            transform: translateY(0) scale(0.97);
+        }
+
+        /* Pulse highlight animation for rounding rules */
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
+            50% { transform: scale(1.03); box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); }
+        }
+
+        .rule-card {
+            animation: pulseGlow 3s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-800 flex flex-col">
+
+    <!-- Header Navigation Bar -->
+    <header class="bg-indigo-600 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center space-x-3">
+                <div class="bg-white/20 p-2.5 rounded-2xl text-2xl">🎯</div>
+                <div>
+                    <h1 class="heading-font text-xl md:text-2xl font-bold tracking-wide">Математик 3-р анги</h1>
+                    <p class="text-xs text-indigo-200">Натурал тоог Аравтаар тоймлох интерактив хичээл</p>
+                </div>
+            </div>
+            
+            <nav class="flex flex-wrap space-x-1 md:space-x-2 bg-indigo-800/40 p-1.5 rounded-2xl text-xs md:text-sm font-bold">
+                <button onclick="switchTab('plan')" id="tab-plan" class="px-3.5 py-2 rounded-xl transition bg-white text-indigo-700 shadow">
+                    📋 Хичээлийн төлөвлөгөө
+                </button>
+                <button onclick="switchTab('lab')" id="tab-lab" class="px-3.5 py-2 rounded-xl transition text-white hover:bg-white/10">
+                    🔬 Тоймлох лаборатори
+                </button>
+                <button onclick="switchTab('game')" id="tab-game" class="px-3.5 py-2 rounded-xl transition text-white hover:bg-white/10">
+                    🎮 Дадлага тоглоом
+                </button>
+                <button onclick="switchTab('quiz')" id="tab-quiz" class="px-3.5 py-2 rounded-xl transition text-white hover:bg-white/10">
+                    🏆 Мэдлэгийн сорилт
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="max-w-6xl mx-auto px-4 py-6 flex-grow w-full">
+
+        <!-- TAB 1: LESSON PLAN -->
+        <section id="sec-plan" class="space-y-6">
+            <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200">
+                <div class="flex items-center space-x-3 mb-6">
+                    <span class="bg-indigo-100 text-indigo-700 text-2xl p-3 rounded-2xl font-bold">📚</span>
+                    <div>
+                        <h2 class="heading-font text-2xl font-bold text-slate-800">Хичээлийн төлөвлөгөө ба Дүрэм</h2>
+                        <p class="text-slate-500 text-sm">3-р анги | Нэгж хичээл: Оронгийн утга ба тоймлох</p>
+                    </div>
+                </div>
+
+                <!-- Learning Objectives & Outcomes -->
+                <div class="grid md:grid-cols-2 gap-4 mb-6">
+                    <div class="bg-indigo-50/70 p-5 rounded-2xl border border-indigo-100">
+                        <h3 class="font-bold text-indigo-900 mb-2 flex items-center">
+                            <i class="fa-solid fa-bullseye text-indigo-600 mr-2"></i> Суралцахуйн зорилго
+                        </h3>
+                        <p class="text-slate-700 text-sm leading-relaxed">
+                            Натурал тооны <strong>нэгжийн орны цифрийг</strong> ажиглан, аравтаар ойролцоолон тоймлох дүрмийг танин мэдэж, амьдралын бодит нөхцөлд болон бодлого бодоход дүрмийг зөв хэрэглэж сурна.
+                        </p>
+                    </div>
+                    <div class="bg-emerald-50/70 p-5 rounded-2xl border border-emerald-100">
+                        <h3 class="font-bold text-emerald-900 mb-2 flex items-center">
+                            <i class="fa-solid fa-circle-check text-emerald-600 mr-2"></i> Хүрэх үр дүн
+                        </h3>
+                        <ul class="text-slate-700 text-sm space-y-1.5 list-disc list-inside">
+                            <li>Өгөгдсөн тоо аль хоёр аравтын хооронд оршиж байгааг тодорхойлно.</li>
+                            <li>Нэгжийн орон нь $0, 1, 2, 3, 4$ байвал <strong>бага аравт</strong> уруу тоймлоно.</li>
+                            <li>Нэгжийн орон нь $5, 6, 7, 8, 9$ байвал <strong>их аравт</strong> уруу тоймлоно.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Visual Rule Highlight Cards -->
+                <div class="mb-8">
+                    <h3 class="heading-font text-lg font-bold text-slate-800 mb-3 flex items-center">
+                        <i class="fa-solid fa-lightbulb text-amber-500 mr-2"></i> Аравтаар тоймлох үндсэн дүрэм
+                    </h3>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <!-- Down Rule -->
+                        <div class="bg-sky-50 p-5 rounded-2xl border-2 border-sky-200 flex space-x-4 items-center">
+                            <div class="text-4xl">⬇️</div>
+                            <div>
+                                <span class="bg-sky-200 text-sky-900 text-xs font-black px-2.5 py-1 rounded-lg">БАГА АРАВТ РУУ (БУУРУУЛАХ)</span>
+                                <p class="text-slate-700 text-xs md:text-sm font-bold mt-1.5">
+                                    Нэгжийн орон нь <span class="text-sky-700 text-base underline font-black">0, 1, 2, 3, 4</span> байвал нэгжийн орныг $0$ болгож, аравтын орныг өөрчлөхгүй.
+                                </p>
+                                <p class="text-slate-500 text-xs mt-1">Жишээ: $3 \mathbf{2} \approx 30$, $14 \mathbf{4} \approx 140$</p>
+                            </div>
+                        </div>
+
+                        <!-- Up Rule -->
+                        <div class="bg-purple-50 p-5 rounded-2xl border-2 border-purple-200 flex space-x-4 items-center">
+                            <div class="text-4xl">⬆️</div>
+                            <div>
+                                <span class="bg-purple-200 text-purple-900 text-xs font-black px-2.5 py-1 rounded-lg">ИХ АРАВТ РУУ (НЭМЭГДҮҮЛЭХ)</span>
+                                <p class="text-slate-700 text-xs md:text-sm font-bold mt-1.5">
+                                    Нэгжийн орон нь <span class="text-purple-700 text-base underline font-black">5, 6, 7, 8, 9</span> байвал аравтын орныг $1$-ээр нэмэгдүүлж, нэгжийн орныг $0$ болгоно.
+                                </p>
+                                <p class="text-slate-500 text-xs mt-1">Жишээ: $3 \mathbf{7} \approx 40$, $14 \mathbf{5} \approx 150$</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Structured Lesson Progression Steps -->
+                <h3 class="heading-font text-xl font-bold text-slate-800 mb-4 flex items-center">
+                    <i class="fa-solid fa-chalkboard-user text-indigo-600 mr-2"></i> Хичээлийн 40 минутын зохион байгуулалт
+                </h3>
+
+                <div class="space-y-4">
+                    <div class="flex items-start space-x-4 p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                        <div class="bg-indigo-600 text-white font-bold px-3 py-1.5 rounded-xl text-sm min-w-[70px] text-center">
+                            7 мин
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800">1. Сэргээн санаж сонирхол эхлүүлэх</h4>
+                            <p class="text-slate-600 text-sm mt-1">
+                                Дэлгүүрээс 37 төгрөгийн чихэр авах гэвэл аав ээж нь ойролцоогоор хэдэн төгрөг бэлтгэдэг вэ? $30$ эсвэл $40$?
+                                Тоон шулуун дээр $37$ гэдэг тоо $30$-д ойрхон уу, $40$-д ойрхон уу гэдгийг ярилцана.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start space-x-4 p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                        <div class="bg-indigo-600 text-white font-bold px-3 py-1.5 rounded-xl text-sm min-w-[70px] text-center">
+                            10 мин
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800">2. Лабораториор дүрэм нээх</h4>
+                            <p class="text-slate-600 text-sm mt-1">
+                                **"🔬 Тоймлох лаборатори"** цэс рүү орж, гулсуурыг хөдөлгөн $31, 32, 33, 34$ ба $35, 36, 37, 38, 39$ тоонууд хаашаа "тэмүүлж" байгааг ажиглана.
+                                $35$ гэдэг голын тоо яагаад их аравт руу тоймлогддог дүрмийг баталгаажуулна.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start space-x-4 p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                        <div class="bg-indigo-600 text-white font-bold px-3 py-1.5 rounded-xl text-sm min-w-[70px] text-center">
+                            18 мин
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800">3. Интерактив тоглоом дадлага</h4>
+                            <p class="text-slate-600 text-sm mt-1">
+                                **"🎮 Дадлага тоглоом"** цэсэнд орж, өгөгдсөн 2 ба 3 оронтой тоонуудыг аравтаар тоймлон тохирох хайрцагт байрлуулах дасгал ажиллана.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start space-x-4 p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                        <div class="bg-indigo-600 text-white font-bold px-3 py-1.5 rounded-xl text-sm min-w-[70px] text-center">
+                            5 мин
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800">4. Мэдлэгийн сорилт ба дүгнэлт</h4>
+                            <p class="text-slate-600 text-sm mt-1">
+                                **"🏆 Мэдлэгийн сорилт"** 5 асуулттай тест ажиллаж, өөрийн үнэлгээ авна.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: ROUNDING LAB VISUALIZER -->
+        <section id="sec-lab" class="hidden space-y-6">
+            <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200">
+                <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+                    <div>
+                        <span class="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-xl text-xs font-bold">🔬 ИНТЕРАКТИВ ЛАБОРАТОРИ</span>
+                        <h2 class="heading-font text-2xl font-bold text-slate-800 mt-1">Тоон шулуунаар Аравтаар тоймлохыг харах</h2>
+                    </div>
+
+                    <!-- Direct Number Input -->
+                    <div class="flex items-center space-x-2">
+                        <label for="lab-num-input" class="text-xs font-bold text-slate-500">Тоо оруул:</label>
+                        <input type="number" id="lab-num-input" value="47" min="1" max="999" class="px-4 py-2 border-2 border-indigo-200 rounded-xl focus:outline-none focus:border-indigo-600 font-extrabold text-indigo-900 text-base w-28 text-center shadow-inner" oninput="updateLabFromInput()">
+                    </div>
+                </div>
+
+                <!-- Slider Control -->
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 mb-6">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-xs font-bold text-slate-500">Гулсуураар тоог өөрчлөх:</span>
+                        <span id="slider-val-display" class="text-sm font-black text-indigo-600 bg-indigo-50 px-3 py-1 rounded-lg border border-indigo-200">Тоо: 47</span>
+                    </div>
+                    <input type="range" id="lab-slider" min="10" max="100" value="47" class="w-full accent-indigo-600 cursor-pointer h-2 bg-slate-200 rounded-lg" oninput="updateLabFromSlider()">
+                </div>
+
+                <!-- Interactive Canvas Visualizer -->
+                <div class="relative bg-slate-900/5 p-4 rounded-3xl border border-indigo-100 overflow-x-auto">
+                    <div class="min-w-[650px]">
+                        <canvas id="labCanvas" width="900" height="260" class="w-full h-auto block rounded-2xl bg-white shadow-inner"></canvas>
+                    </div>
+                </div>
+
+                <!-- Explanation / Rule Status Box -->
+                <div id="lab-rule-explain" class="mt-6 p-5 rounded-2xl bg-indigo-50 border border-indigo-100 flex flex-wrap items-center justify-between gap-4">
+                    <!-- Dynamic text inserted by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: PRACTICE GAME -->
+        <section id="sec-game" class="hidden space-y-6">
+            <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200 text-center">
+                <div class="flex flex-wrap items-center justify-between gap-4 mb-4 text-left">
+                    <div>
+                        <span class="bg-emerald-100 text-emerald-800 px-3 py-1 rounded-xl text-xs font-bold">🎮 ДАДЛАГА ТОГЛООМ</span>
+                        <h2 class="heading-font text-2xl font-bold text-slate-800 mt-1">Аравтаар тоймлох дасгал</h2>
+                    </div>
+                    <div class="flex space-x-3 items-center">
+                        <div class="bg-amber-50 border border-amber-200 text-amber-800 font-extrabold px-4 py-2 rounded-2xl text-sm">
+                            ⭐ Оноо: <span id="game-score" class="text-lg">0</span>
+                        </div>
+                        <div class="bg-indigo-50 border border-indigo-200 text-indigo-800 font-extrabold px-4 py-2 rounded-2xl text-sm">
+                            🔥 Дараалсан зөв: <span id="game-streak" class="text-lg">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="text-slate-500 text-sm mb-6 text-left">
+                    Өгөгдсөн тооны <strong>нэгжийн орныг</strong> ажиглаад, хамгийн ойр тохирох <strong>аравтыг</strong> сонгон дарна уу!
+                </p>
+
+                <!-- Game Question Card Display -->
+                <div class="bg-indigo-900/5 p-8 rounded-3xl border border-indigo-100 max-w-xl mx-auto mb-8 shadow-sm">
+                    <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest">АРАВТААР ТОЙМЛОХ ТОО:</span>
+                    <div id="game-target-number" class="heading-font text-6xl md:text-7xl font-black text-indigo-950 my-4 tracking-wider">
+                        64
+                    </div>
+                    <div id="game-ones-hint" class="text-xs text-indigo-600 font-bold bg-white inline-block px-4 py-2 rounded-xl shadow-sm border border-indigo-100">
+                        💡 Нэгжийн орон нь: <span class="text-rose-600 font-black text-sm">4</span>
+                    </div>
+                </div>
+
+                <!-- Answer Choice Buttons -->
+                <div id="game-options-container" class="grid grid-cols-2 md:grid-cols-2 gap-4 max-w-xl mx-auto mb-6">
+                    <!-- Option buttons dynamically generated by JS -->
+                </div>
+
+                <!-- Feedback & Hints -->
+                <div id="game-feedback" class="hidden p-4 rounded-2xl font-bold text-base max-w-xl mx-auto transition-all"></div>
+
+                <div class="mt-6 flex justify-center">
+                    <button onclick="nextGameQuestion()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-6 py-2.5 rounded-xl transition text-sm">
+                        🔄 Өөр тоо авах
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: QUIZ EVALUATION -->
+        <section id="sec-quiz" class="hidden space-y-6">
+            <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <span class="bg-purple-100 text-purple-700 px-3 py-1 rounded-xl text-xs font-bold">🏆 МЭДЛЭГИЙН СОРИЛТ</span>
+                        <h2 class="heading-font text-2xl font-bold text-slate-800 mt-1">Аравтаар тоймлох Мастер</h2>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">ОНОО</span>
+                        <div id="quiz-score" class="text-2xl font-black text-indigo-600">0 / 5</div>
+                    </div>
+                </div>
+
+                <div id="quiz-body">
+                    <!-- Dynamic Quiz Container -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-500">
+        Математик 3-р анги | Натурал тоог аравтаар ойролцоолон тоймлох интерактив сургалт
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Active tab state
+        let currentTab = 'plan';
+
+        // Lab state
+        let labVal = 47;
+
+        // Practice game state
+        let gameTarget = 64;
+        let gameScore = 0;
+        let gameStreak = 0;
+
+        // Quiz state
+        let quizIndex = 0;
+        let quizScore = 0;
+        let quizQuestions = [];
+
+        function switchTab(tab) {
+            currentTab = tab;
+            ['plan', 'lab', 'game', 'quiz'].forEach(t => {
+                const sec = document.getElementById(`sec-${t}`);
+                const btn = document.getElementById(`tab-${t}`);
+                if (t === tab) {
+                    sec.classList.remove('hidden');
+                    btn.classList.add('bg-white', 'text-indigo-700', 'shadow');
+                    btn.classList.remove('text-white', 'hover:bg-white/10');
+                } else {
+                    sec.classList.add('hidden');
+                    btn.classList.remove('bg-white', 'text-indigo-700', 'shadow');
+                    btn.classList.add('text-white', 'hover:bg-white/10');
+                }
+            });
+
+            if (tab === 'lab') {
+                drawLabCanvas();
+            } else if (tab === 'game' && gameScore === 0) {
+                initGameQuestion();
+            } else if (tab === 'quiz' && quizQuestions.length === 0) {
+                initQuiz();
+            }
+        }
+
+        function updateLabFromSlider() {
+            labVal = parseInt(document.getElementById('lab-slider').value) || 10;
+            document.getElementById('lab-num-input').value = labVal;
+            document.getElementById('slider-val-display').innerText = `Тоо: ${labVal}`;
+            drawLabCanvas();
+        }
+
+        function updateLabFromInput() {
+            let v = parseInt(document.getElementById('lab-num-input').value);
+            if (isNaN(v) || v < 1) v = 1;
+            labVal = v;
+            document.getElementById('lab-slider').value = Math.min(Math.max(v, 10), 100);
+            document.getElementById('slider-val-display').innerText = `Тоо: ${labVal}`;
+            drawLabCanvas();
+        }
+
+        function drawLabCanvas() {
+            const canvas = document.getElementById('labCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const W = canvas.width;
+            const H = canvas.height;
+
+            ctx.clearRect(0, 0, W, H);
+
+            // Calculate surrounding tens
+            const lowerTen = Math.floor(labVal / 10) * 10;
+            const upperTen = lowerTen + 10;
+            const midVal = lowerTen + 5;
+
+            const onesDigit = labVal % 10;
+            const roundsUp = onesDigit >= 5;
+            const roundedResult = roundsUp ? upperTen : lowerTen;
+
+            const padding = 80;
+            const lineY = H / 2 + 15;
+            const startX = padding;
+            const endX = W - padding;
+            const lineLen = endX - startX;
+
+            // Main axis line
+            ctx.beginPath();
+            ctx.moveTo(startX - 15, lineY);
+            ctx.lineTo(endX + 15, lineY);
+            ctx.strokeStyle = '#334155';
+            ctx.lineWidth = 4;
+            ctx.stroke();
+
+            // End arrows
+            ctx.fillStyle = '#334155';
+            ctx.beginPath();
+            ctx.moveTo(startX - 20, lineY);
+            ctx.lineTo(startX - 10, lineY - 7);
+            ctx.lineTo(startX - 10, lineY + 7);
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.moveTo(endX + 20, lineY);
+            ctx.lineTo(endX + 10, lineY - 7);
+            ctx.lineTo(endX + 10, lineY + 7);
+            ctx.fill();
+
+            // Draw ticks for numbers from lowerTen to upperTen
+            for (let i = 0; i <= 10; i++) {
+                const currentNum = lowerTen + i;
+                const ratio = i / 10;
+                const x = startX + ratio * lineLen;
+
+                const isMajor = (i === 0 || i === 10);
+                const isMid = (i === 5);
+
+                ctx.beginPath();
+                ctx.moveTo(x, lineY - (isMajor ? 18 : (isMid ? 12 : 8)));
+                ctx.lineTo(x, lineY + (isMajor ? 18 : (isMid ? 12 : 8)));
+                ctx.strokeStyle = isMajor ? '#4338ca' : (isMid ? '#f59e0b' : '#94a3b8');
+                ctx.lineWidth = isMajor ? 3.5 : (isMid ? 2.5 : 1.5);
+                ctx.stroke();
+
+                // Text labels for tens and middle 5
+                ctx.fillStyle = isMajor ? '#1e1b4b' : (isMid ? '#b45309' : '#64748b');
+                ctx.font = isMajor ? 'bold 16px Nunito, sans-serif' : (isMid ? 'bold 13px Nunito' : '11px Nunito');
+                ctx.textAlign = 'center';
+                ctx.fillText(currentNum.toString(), x, lineY + 38);
+            }
+
+            // Draw current value position pin
+            const activeRatio = (labVal - lowerTen) / 10;
+            const activeX = startX + activeRatio * lineLen;
+
+            // Distance arc to rounded target
+            const targetRatio = (roundedResult - lowerTen) / 10;
+            const targetX = startX + targetRatio * lineLen;
+
+            ctx.beginPath();
+            ctx.setLineDash([5, 5]);
+            ctx.moveTo(activeX, lineY - 25);
+            ctx.quadraticCurveTo((activeX + targetX) / 2, lineY - 80, targetX, lineY - 25);
+            ctx.strokeStyle = roundsUp ? '#9333ea' : '#0284c7';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Pointer vertical dotted line
+            ctx.beginPath();
+            ctx.setLineDash([3, 3]);
+            ctx.moveTo(activeX, lineY - 10);
+            ctx.lineTo(activeX, lineY - 40);
+            ctx.strokeStyle = '#e11d48';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Pin marker
+            ctx.beginPath();
+            ctx.arc(activeX, lineY, 9, 0, Math.PI * 2);
+            ctx.fillStyle = '#e11d48';
+            ctx.fill();
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 2.5;
+            ctx.stroke();
+
+            // Value badge floating tag above line
+            const tagW = 70;
+            const tagH = 32;
+            const tagX = Math.max(padding - 20, Math.min(W - padding - tagW + 20, activeX - tagW / 2));
+            const tagY = lineY - 75;
+
+            ctx.fillStyle = '#e11d48';
+            ctx.beginPath();
+            if (ctx.roundRect) ctx.roundRect(tagX, tagY, tagW, tagH, 10);
+            else ctx.rect(tagX, tagY, tagW, tagH);
+            ctx.fill();
+
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'extrabold 15px Nunito, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(labVal.toString(), tagX + tagW / 2, tagY + 21);
+
+            // Update bottom rule explanation box
+            const ruleBox = document.getElementById('lab-rule-explain');
+            const onesColor = roundsUp ? 'text-purple-700 font-black' : 'text-sky-700 font-black';
+            
+            ruleBox.innerHTML = `
+                <div class="space-y-1">
+                    <div class="text-xs font-bold text-slate-500 uppercase">Ойролцоолон тоймлох тайлбар:</div>
+                    <div class="text-base font-extrabold text-slate-800">
+                        ${labVal} тооны нэгжийн орон дээрх цифр нь <span class="${onesColor} underline text-lg">${onesDigit}</span> байна.
+                    </div>
+                    <p class="text-xs text-slate-600">
+                        ${onesDigit} нь ${roundsUp ? '5 ба түүнээс ИХ тул <strong>ИХ АРАВТ УРУУ</strong>' : '4 ба түүнээс БАГА тул <strong>БАГА АРАВТ УРУУ</strong>'} тоймлогдоно.
+                    </p>
+                </div>
+                <div class="bg-white px-5 py-3 rounded-2xl border border-indigo-200 text-center shadow-sm">
+                    <span class="text-xs font-bold text-indigo-400 block">ҮР ДҮН:</span>
+                    <span class="text-2xl font-black ${roundsUp ? 'text-purple-700' : 'text-sky-700'}">${labVal} ≈ ${roundedResult}</span>
+                </div>
+            `;
+        }
+
+        function initGameQuestion() {
+            // Generate random 2-digit or 3-digit number
+            const isThreeDigit = Math.random() > 0.6;
+            if (isThreeDigit) {
+                gameTarget = Math.floor(Math.random() * 800) + 105; // 105 - 905
+            } else {
+                gameTarget = Math.floor(Math.random() * 85) + 12; // 12 - 97
+            }
+
+            const ones = gameTarget % 10;
+            const lowerTen = Math.floor(gameTarget / 10) * 10;
+            const upperTen = lowerTen + 10;
+            const correctTarget = ones >= 5 ? upperTen : lowerTen;
+
+            document.getElementById('game-target-number').innerText = gameTarget;
+            document.getElementById('game-ones-hint').innerHTML = `💡 Нэгжийн орон нь: <span class="text-rose-600 font-black text-sm">${ones}</span>`;
+
+            // Hide feedback
+            const fb = document.getElementById('game-feedback');
+            fb.classList.add('hidden');
+
+            // Generate distractors
+            let choices = new Set();
+            choices.add(correctTarget);
+            choices.add(ones >= 5 ? lowerTen : upperTen); // The opposite ten
+            choices.add(correctTarget + 10);
+            choices.add(correctTarget - 10);
+
+            let choicesArray = Array.from(choices).filter(n => n >= 0).slice(0, 4);
+            choicesArray.sort(() => Math.random() - 0.5);
+
+            const optionsContainer = document.getElementById('game-options-container');
+            optionsContainer.innerHTML = '';
+
+            choicesArray.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = `btn-interactive bg-white border-2 border-indigo-200 hover:border-indigo-600 text-indigo-950 font-black text-2xl py-4 rounded-2xl shadow-sm text-center`;
+                btn.innerText = opt;
+                btn.onclick = () => submitGameAnswer(opt, correctTarget);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function submitGameAnswer(selected, correct) {
+            const fb = document.getElementById('game-feedback');
+            
+            if (selected === correct) {
+                gameScore += 10;
+                gameStreak++;
+                document.getElementById('game-score').innerText = gameScore;
+                document.getElementById('game-streak').innerText = gameStreak;
+
+                fb.className = 'p-4 rounded-2xl font-bold text-center text-base bg-emerald-100 text-emerald-900 border border-emerald-300 max-w-xl mx-auto block';
+                fb.innerText = `🎉 Маш сайн! Зөв байна. ${gameTarget} ≈ ${correct}`;
+
+                confetti({
+                    particleCount: 50,
+                    spread: 60,
+                    origin: { y: 0.7 }
+                });
+
+                setTimeout(() => {
+                    initGameQuestion();
+                }, 1500);
+
+            } else {
+                gameStreak = 0;
+                document.getElementById('game-streak').innerText = 0;
+
+                fb.className = 'p-4 rounded-2xl font-bold text-center text-base bg-rose-100 text-rose-900 border border-rose-300 max-w-xl mx-auto block';
+                fb.innerText = `❌ Буруу байна. Нэгжийн орноо дахин сайн ажиглаарай!`;
+            }
+        }
+
+        function nextGameQuestion() {
+            initGameQuestion();
+        }
+
+        function initQuiz() {
+            quizIndex = 0;
+            quizScore = 0;
+            document.getElementById('quiz-score').innerText = `0 / 5`;
+
+            quizQuestions = [
+                {
+                    q: "43 гэдэг тооны нэгжийн орон нь 3 байна. Аравтаар тоймловол хэд болох вэ?",
+                    options: ["40", "50", "30", "43"],
+                    correct: 0,
+                    explain: "Нэгжийн орон нь 3 (4-өөс бага) тул бага аравт буюу 40 руу тоймлогдно."
+                },
+                {
+                    q: "Дараах тоонуудаас аравтаар тоймлоход 80 болдог ТООГ сонгоно уу:",
+                    options: ["72", "86", "77", "88"],
+                    correct: 2,
+                    explain: "77 тооны нэгжийн орон нь 7 (5-аас их) тул их аравт буюу 80 руу тоймлогдно."
+                },
+                {
+                    q: "Дэлгүүрт бараа 125 төгрөгийн үнэтэй байв. Аравтаар ойролцоолон тоймловол хэдэн төгрөг болох вэ?",
+                    options: ["120", "130", "100", "150"],
+                    correct: 1,
+                    explain: "125 тооны нэгжийн орон нь 5 тул их аравт буюу 130 руу тоймлогдно."
+                },
+                {
+                    q: "Нэгжийн орон нь 5, 6, 7, 8, 9 байвал тоог хэрхэн тоймлох вэ?",
+                    options: [
+                        "Бага аравт руу бууруулж тоймлоно",
+                        "Өөрчлөхгүй хэвээр үлдээнэ",
+                        "Их аравт руу нэмэгдүүлж тоймлоно",
+                        "Шууд 0 болгоно"
+                    ],
+                    correct: 2,
+                    explain: "Нэгжийн орон 5 ба түүнээс дээш байвал ИХ АРАВТ руу нэмэгдүүлж тоймлодог."
+                },
+                {
+                    q: "Сурагч 348 хуудастай ном уншив. Ойролцоогоор хэдэн хуудас уншсан бэ? (Аравтаар тоймлоорой)",
+                    options: ["340", "350", "300", "400"],
+                    correct: 1,
+                    explain: "348 тооны нэгжийн орон нь 8 тул их аравт буюу 350 болно."
+                }
+            ];
+
+            renderQuiz();
+        }
+
+        function renderQuiz() {
+            const container = document.getElementById('quiz-body');
+
+            if (quizIndex >= quizQuestions.length) {
+                container.innerHTML = `
+                    <div class="text-center py-10 space-y-4">
+                        <div class="text-6xl">🏆</div>
+                        <h3 class="heading-font text-2xl font-bold text-slate-800">Сорилт амжилттай дууслаа!</h3>
+                        <p class="text-lg text-slate-600">Таны авсан оноо: <strong class="text-indigo-600 text-2xl">${quizScore} / ${quizQuestions.length}</strong></p>
+                        <button onclick="initQuiz()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-3 rounded-2xl shadow-lg transition">
+                            🔄 Дахин сорих
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            const q = quizQuestions[quizIndex];
+
+            let optionsHTML = q.options.map((opt, idx) => `
+                <button onclick="submitQuizAnswer(${idx})" class="w-full text-left p-4 rounded-2xl border-2 border-slate-200 hover:border-indigo-500 hover:bg-indigo-50/50 transition font-bold text-base text-slate-800 flex justify-between items-center">
+                    <span>${opt}</span>
+                    <i class="fa-regular fa-circle text-slate-300"></i>
+                </button>
+            `).join('');
+
+            container.innerHTML = `
+                <div class="space-y-6">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-slate-400">Асуулт ${quizIndex + 1} / ${quizQuestions.length}</span>
+                        <span class="text-xs font-extrabold bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full">Аравтаар тоймлох</span>
+                    </div>
+
+                    <p class="text-base md:text-lg font-bold text-slate-800">
+                        ${q.q}
+                    </p>
+
+                    <div class="space-y-3 pt-2">
+                        ${optionsHTML}
+                    </div>
+
+                    <div id="quiz-feedback" class="hidden p-4 rounded-2xl font-bold text-center text-sm"></div>
+                </div>
+            `;
+        }
+
+        function submitQuizAnswer(selectedIdx) {
+            const q = quizQuestions[quizIndex];
+            const isCorrect = selectedIdx === q.correct;
+            const feedback = document.getElementById('quiz-feedback');
+
+            if (isCorrect) {
+                quizScore++;
+                document.getElementById('quiz-score').innerText = `${quizScore} / ${quizQuestions.length}`;
+                feedback.className = 'p-4 rounded-2xl font-bold text-center bg-emerald-100 text-emerald-900 border border-emerald-300';
+                feedback.innerText = `✨ Зөв байна! (${q.explain})`;
+            } else {
+                feedback.className = 'p-4 rounded-2xl font-bold text-center bg-rose-100 text-rose-900 border border-rose-300';
+                feedback.innerText = `❌ Буруу байна! Зөв хариулт: ${q.options[q.correct]}. (${q.explain})`;
+            }
+
+            feedback.classList.remove('hidden');
+
+            setTimeout(() => {
+                quizIndex++;
+                renderQuiz();
+            }, 2200);
+        }
+
+        window.onload = function() {
+            switchTab('plan');
+            window.addEventListener('resize', () => {
+                if (currentTab === 'lab') drawLabCanvas();
+            });
+        };
+    </script>
+</body>
+</html>
